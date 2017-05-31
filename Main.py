@@ -1,12 +1,13 @@
+#importation du module
 import pygame
 from pygame.locals import *
 
-
+#initialise toute la bibliothèque
 pygame.init()
 
-""" valeur """
+#Valeurs
 
-image_menu = "images/menu.png"
+image_menu = "images/menu.jpg"
 
 image_fond = "images/fond.jpg"
 
@@ -40,11 +41,25 @@ titre_fenetre = "Link's Revenge"
 image_icone = "images/droite.png"
 
 
+#création des différents sons du jeu
+##truc = pygame.mixer.Sound("")
+
+
+#Lancement de la musique du jeu
+pygame.mixer.music.load("musique/menu.wav")
+pygame.mixer.music.play()
+
+pygame.mixer.music.set_volume(0.18)
+
+#pygame.mixer.music.load("final.wav")
 
 
 
 
-""" function """
+
+
+
+#Fonctions
 
 class Niveau:
 
@@ -177,6 +192,13 @@ class Perso:
 
         
 
+##        self.box_x = 0
+##
+##        self.box_y = 0
+##
+##        self.x = 0
+##
+##        self.y = 0
 
 
         self.direction = self.droite
@@ -318,6 +340,7 @@ class Perso:
                 
 
             self.direction = self.bas
+
             
 #gravity
         while self.niveau.etage[self.box_y+1][self.box_x] == '0':
@@ -333,7 +356,7 @@ class Perso:
             self.y = self.box_y * taille_img
 
 
-""" prog """
+#BOUCLE DU JEU EN ENTIER
 
 
 fenetre = pygame.display.set_mode((cote_fenetre, cote_fenetre))
@@ -353,37 +376,53 @@ while roll:
 
     roll_partie = 1
     roll_menu = 1
+    roll_regles = 1
+    niveau = 0
 
 
     while roll_menu:
         pygame.time.Clock().tick(50)
 
         for event in pygame.event.get():
-            
+
+           
             if event.type == KEYDOWN:
-                if event.key == K_F1:
-
-                    roll_menu = 0   
-
-                    lvl = 'etage1'        
-
-                
-
-                elif event.key == K_2 and event.key == K_RETURN:
-
+                #lance le jeu
+                 if event.key == K_F1:
                     roll_menu = 0
+                    roll_regles = 0
+                    lvl = 'etage1'
 
-                    lvl = 'boss'
-                    
-            elif event.type == KEYDOWN and event.key == K_ESCAPE or event.type == QUIT:
+                #lancement des regles du jeu
+                 elif event.key == K_F2:
+                     roll_menu = 0
+                     lvl = 0
+                     fond = pygame.image.load("images/regles.jpg").convert()
+                     fenetre.blit(fond, (0,0))
+
+                 elif event.key == K_ESCAPE:
+                     
+                     roll_menu = 0
+                     roll_partie = 0
+                     roll = 0
+                     lvl = 0
+
+                 elif event.key == K_2 and event.key == K_RETURN:
+                     roll_menu = 0
+                     lvl = 'boss'
+
+                #quitte le jeu        
+                 elif event.type == QUIT:
                 
-                roll_menu = 0
-                roll_partie = 0
-                roll = 0
-                lvl = 0
+                     roll_menu = 0
+                     roll_partie = 0
+                     roll = 0
+                     lvl = 0
+
+            
 
 
-
+    
     if lvl != 0:
 
         fond = pygame.image.load(image_fond).convert()
@@ -466,4 +505,6 @@ while roll:
         if niveau.etage[link.box_y][link.box_x] == 'a' and clef == 1:
 
             roll_partie = 0
-        
+
+
+pygame.quit()        
