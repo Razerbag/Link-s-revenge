@@ -1,4 +1,4 @@
-#importation du module
+#importation du module et des autres branches
 import pygame
 from pygame.locals import *
 from constantes import *
@@ -9,13 +9,6 @@ from mob import *
 
 #initialise toute la bibliothèque
 pygame.init()
-
-
-
-
-
-
-
 
 
 
@@ -34,36 +27,42 @@ pygame.init()
 
 #BOUCLE DU JEU EN ENTIER
 
-
+#ouverture de la fenetre, titre, icone
 fenetre = pygame.display.set_mode((cote_fenetre, cote_fenetre))
+
 icone = pygame.image.load(image_icone)
 pygame.display.set_caption(titre_fenetre)
 pygame.display.set_icon(icone)
+
+#chargement au préalable des deux fonds utiliser dans le menu
 regles = pygame.image.load(image_regles).convert()
 fond = pygame.image.load(image_fond).convert()
-
-
+ #lancement de la boucle principale
 roll = 1
+
 
 while roll:
     
     
-
+#prepare les differentes boucles, lancement de la boucle du menu
     roll_partie = 0
     roll_menu = 1
     roll_regles = 0
     niveau = 0
+    
 
 
     while roll_menu:
+        #affichage de l'acceuil
         menu = pygame.image.load(image_menu).convert()
         fenetre.blit(menu, (0,0))
 
         pygame.display.flip()
 
-        
-        pygame.time.Clock().tick(50)
+        #limitation de vitesse
+        pygame.time.Clock().tick(100)
 
+#attente d'une action utilisateur
         for event in pygame.event.get():
 
            
@@ -74,6 +73,7 @@ while roll:
                     roll_regles = 0
                     roll_partie = 1
                     lvl = 'etage1'
+                    clef = 0
 
                 #lancement des regles du jeu
                  elif event.key == K_F2:
@@ -101,9 +101,8 @@ while roll:
                      lvl = 0
                      
 
-            
+#affiche des regles du jeu            
     while roll_regles:
-        # regles = pygame.image.load(image_regles).convert()
         fenetre.blit(regles, (0,0))
 
         pygame.display.flip()
@@ -119,28 +118,29 @@ while roll:
                             
                 elif event.type == QUIT:
                     pygame.quit()
+                    roll_regles = 0
                     roll = 0
                     
 
-    
+    #intialisation du jeu
     if lvl != 0:
 
-       # fond = pygame.image.load(image_fond).convert()
 
-        clef = 0
-        niveau = Niveau(lvl)
-        niveau.generation()
-        niveau.display(fenetre)
+
+        
+        niveau = Niveau(lvl) #initialisation du niveau
+        niveau.generation(clef) #generation du niveau
+        niveau.display(fenetre)  #affichage du niv genere
 
 
         link = Perso("images/droite.png", "images/gauche.png", "images/haut.png", "images/bas.png", niveau)
-
+#initialisation du personnage
 
     while roll_partie:        
 
         pygame.time.Clock().tick(60)
 
-    
+    #attente d'une action utilisateur
 
         for event in pygame.event.get():
 
@@ -164,7 +164,7 @@ while roll:
 
                 
 
-                elif event.key == K_RIGHT:
+                elif event.key == K_RIGHT:    #si demande de deplacement de l'utilisateurs, lance la fonction de mouvement associé
 
                     link.move('droite')
 
@@ -180,29 +180,39 @@ while roll:
 
                     link.move('bas')
 
-                elif event.key == K_SPACE:
+                elif event.key == K_E:
                     link.atk()
 
             
 
-        
-
-        fenetre.blit(fond, (0,0))
-
-        niveau.display(fenetre)
-
-        fenetre.blit(link.direction, (link.x, link.y)) 
-
-        pygame.display.flip()
-
 
         
-        if niveau.etage[link.box_y][link.box_x] == 'c':
+
+        fenetre.blit(fond, (0,0)) #remet le fond
+
+        niveau.display(fenetre) #on remet le niveau
+
+        fenetre.blit(link.direction, (link.x, link.y)) #on remet link à sa nouvelle position
+
+        pygame.display.flip() #actuallisation de la fenetre
+
+
+        if niveau.etage[link.box_y][link.box_x] == 'c': #on verifie si link est sur la case de la clef
+            clef = 1 #on le note
+            fenetre.blit(fond, (0,0)) #remet le fond
+            niveau = Niveau(lvl) #initialisation du niveau
+            niveau.generation(clef) #generation du niveau sans la clef
+        
+            niveau.display(fenetre) #on remet le niveau
+
+            fenetre.blit(link.direction, (link.x, link.y)) #on remet link à sa nouvelle position
+
+            pygame.display.flip() #actualisation
+          
             
-            clef = 1
             
             
-        if niveau.etage[link.box_y][link.box_x] == 'a' and clef == 1:
+        if niveau.etage[link.box_y][link.box_x] == 'a' and clef == 1: #on verifie si link est sur la case de la fin et si il a la clef
 
             roll_partie = 0
 

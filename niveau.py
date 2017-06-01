@@ -4,28 +4,32 @@ from constantes import *
 from perso import *
 from mob import *
 
+
+#creation de l'objet niveau
 class Niveau:
 
 
-    def __init__(self, fichier):
+    def __init__(self, fichier): #on attribut a l'obj, self et le fichier du niveau
 
-        self.fichier = fichier
+        self.fichier = fichier #l'obj niveau prend une variable appelé fichier dans laquelle on met le fichier du niveau à chargé
 
-        self.etage = 0
-
-    
+        self.etage = 0 
 
     
 
-    def generation(self):
+    
+
+    def generation(self, clef):
+
+        
 
 
-        with open(self.fichier, "r") as fichier:
+        with open(self.fichier, "r") as fichier: # on lit le fichier du niveau à charger
 
-            etage_niveau = []
+            etage_niveau = [] #on crée un espace de stockage dans lequel nous allons mettre les  informations de construction de l'etage
 
 
-            for line in fichier:
+            for line in fichier: #pour chaque etape horizontal de l'etage on crée un liste contenant chaque elements de la ligne  
 
                 line_niveau = []
 
@@ -35,14 +39,20 @@ class Niveau:
 
                     if img != '\n':
 
+                        if img != 'c':
 
-                        line_niveau.append(img)
+                            line_niveau.append(img)
+                            
+                        if img == 'c' and clef != 1:
+                            line_niveau.append(img)
+                        if img == 'c' and clef == 1:
+                            line_niveau.append('0')
 
 
                 etage_niveau.append(line_niveau)
 
 
-            self.etage = etage_niveau
+            self.etage = etage_niveau #on enregistre 
 
     
 
@@ -63,15 +73,15 @@ class Niveau:
 
         num_line = 0
 
-        for line in self.etage:
+        for line in self.etage:#on parcourt notre espace stockant les lignes
 
 
             num_box = 0
 
-            for img in line:
+            for img in line:#on lit ligne apres ligne
 
 
-                x = num_box * taille_img
+                x = num_box * taille_img #adapte une box à la taille des image
 
                 y = num_line * taille_img
 
@@ -103,9 +113,11 @@ class Niveau:
 
                     fenetre.blit(trou, (x,y))
 
-                elif img == 'c': #clef
-
+                elif img == 'c':
+                    
                     fenetre.blit(clef, (x,y))
+                    
+                
 
                 num_box += 1
 

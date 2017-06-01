@@ -7,7 +7,7 @@ from constantes import *
 class Perso:
 
 
-    def __init__(self, droite, gauche, haut, bas, niveau,):
+    def __init__(self, droite, gauche, haut, bas, niveau):
 
 
         self.droite = pygame.image.load(droite).convert_alpha()
@@ -18,19 +18,7 @@ class Perso:
 
         self.bas = pygame.image.load(bas).convert_alpha()
 
-        
-
-##        self.box_x = 0
-##
-##        self.box_y = 0
-##
-##        self.x = 0
-##
-##        self.y = 0
-
-
         self.direction = self.droite
-
 
         self.niveau = niveau
 
