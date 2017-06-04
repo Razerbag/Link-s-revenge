@@ -1,4 +1,12 @@
-class Mob:
+import pygame
+from pygame.locals import * 
+from constantes import *
+
+
+
+
+
+class mob:
 
 
     def __init__(self, droite, gauche, niveau):
@@ -26,7 +34,10 @@ class Mob:
 
         
 
-
+        if direction == 'tdroite':
+            self.direction = self.droite
+        if direction == 'tgauche':
+            self.direction = self.gauche
         if direction == 'droite':
 
 
@@ -115,18 +126,3 @@ class Mob:
 
             
             
-#gravity
-        while self.niveau.etage[self.box_y+1][self.box_x] == '0':
-            
-            self.box_y  +=  1
-            self.y = self.box_y * taille_img
-            
-            if self.niveau.etage[self.box_y+1][self.box_x] == 'a':
-                self.box_y  +=  1
-                self.y = self.box_y * taille_img
-                
-            elif self.niveau.etage[self.box_y+1][self.box_x] == 'c':
-                self.box_y  +=  1
-                self.y = self.box_y * taille_img
-                
-            continue
