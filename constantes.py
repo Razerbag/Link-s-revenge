@@ -26,7 +26,7 @@ taille_img = 60
 
 cote_fenetre = nombre_img_cote * taille_img
 
-
+clef = 0
 
 titre_fenetre = "Link's Revenge"
 
